@@ -2,9 +2,11 @@
 </script>
 
 <template>
-  <div>
+  <main>
     <h1>Product Dashboard</h1>
-  </div>
+    <p>This is a product dashboard</p>
+    <button>Click me</button>
+  </main>
 </template>
 
 <style scoped></style>
