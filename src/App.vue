@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import ProductList from './components/ProductList.vue';
 </script>
 
 <template>
   <main>
     <h1>Product Dashboard</h1>
     <p>This is a product dashboard</p>
-    <button>Click me</button>
+
+    <ProductList />
   </main>
 </template>
 
