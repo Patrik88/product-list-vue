@@ -5,10 +5,14 @@ import ProductList from './components/ProductList.vue';
 <template>
   <main>
     <h1>Product Dashboard</h1>
-    <p>This is a product dashboard</p>
-
+    <hr>
     <ProductList />
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+h1 {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+</style>

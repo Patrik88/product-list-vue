@@ -68,8 +68,6 @@ const filteredProducts = computed<Product[]>(() => {
 
 <template>
   <section aria-labelledby="product-heading">
-    <h2>Products</h2>
-
     <!-- Combined toolbar -->
     <ProductToolbar :categories="products?.map((p) => p.category) || []" @update:search="handleSearch"
       @update:filters="handleFilters" />
