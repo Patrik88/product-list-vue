@@ -38,6 +38,10 @@ const props = defineProps<ProductCardProps>()
 </template>
 
 <style scoped>
+h3 {
+  font-size: 1.15rem;
+}
+
 .product-card {
   display: flex;
   flex-direction: column;
