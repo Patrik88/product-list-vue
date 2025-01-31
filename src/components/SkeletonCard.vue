@@ -15,7 +15,7 @@
 .skeleton {
   background-color: var(--pico-muted-border-color);
   padding: 1rem;
-  height: 500.5px;
+  height: 450px;
 }
 
 .skeleton-image {
