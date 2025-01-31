@@ -1,69 +1,21 @@
 <script setup lang="ts">
-// Vue and third-party imports
-import { ref, computed } from 'vue'
 // Composable imports
 import { useProducts } from '../composables/useProducts'
+import { useProductFilters } from '../composables/useProductFilters'
 // Component imports
 import ProductToolbar from './ProductToolbar.vue'
 import ProductCard from './ProductCard.vue'
 import SkeletonCard from './SkeletonCard.vue'
-// Type imports
-import type { Product } from '../types'
 
+// Data fetching  
 const { data: products, isLoading, isError } = useProducts()
 
-interface ProductListFilters {
-  category: string
-  availability: string
-  sort: '' | 'asc' | 'desc'
-}
-
-const searchTerm = ref('')
-const filters = ref<ProductListFilters>({
-  category: '',
-  availability: '',
-  sort: ''
-})
-
-function handleSearch(value: string) {
-  searchTerm.value = value
-}
-
-function handleFilters(newFilters: ProductListFilters) {
-  filters.value = newFilters
-}
-
-const filteredProducts = computed<Product[]>(() => {
-  if (!products.value) return []
-
-  const result = products.value.filter((product) => {
-    // Filter by category
-    if (filters.value.category && product.category !== filters.value.category) return false
-
-    // Filter by availability
-    if (filters.value.availability === 'available' && !product.available) return false
-    if (filters.value.availability === 'unavailable' && product.available) return false
-
-    // Filter by search term
-    if (
-      searchTerm.value &&
-      !product.name.toLowerCase().includes(searchTerm.value.toLowerCase())
-    ) {
-      return false
-    }
-
-    return true
-  })
-
-  // NEW: Sorting by price ascending/descending
-  if (filters.value.sort === 'asc') {
-    return [...result].sort((a, b) => a?.price - b?.price)
-  } else if (filters.value.sort === 'desc') {
-    return [...result].sort((a, b) => b?.price - a?.price)
-  }
-
-  return result
-})
+// Product filtering
+const {
+  filteredProducts,
+  handleSearch,
+  handleFilters
+} = useProductFilters(products)
 </script>
 
 <template>
