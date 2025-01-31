@@ -15,39 +15,44 @@ const props = defineProps<ProductCardProps>()
 </script>
 
 <template>
-  <article role="listitem">
+  <article role="listitem" class="product-card">
     <figure class="image-container">
       <img :src="props.product.image" :alt="`Image of ${props.product.name}`" loading="lazy" />
     </figure>
 
-    <h3 style="--pico-font-size: 1.2rem;">
-      {{ props.product.name }}
-    </h3>
+    <hgroup>
+      <h3>{{ props.product.name }}</h3>
+      <p>Category: {{ props.product.category }}</p>
+    </hgroup>
 
-    <!-- Use formattedPrice if available; fallback to raw price -->
-    <p style="color: var(--pico-primary);">
-      {{ props.product.formattedPrice || props.product.price }}
-    </p>
+    <div class="price-button-container">
+      <strong :class="{ 'available': props.product.available, 'unavailable': !props.product.available }">
+        <span>{{ props.product.formattedPrice || props.product.price }}</span>
+      </strong>
 
-    <p style="color: var(--pico-secondary);">
-      Category: {{ props.product.category }}
-    </p>
-
-    <p v-if="!props.product.available" aria-live="polite" style="color: var(--pico-del-color);">
-      Not Available
-    </p>
+      <button class="button" :disabled="!props.product.available">
+        {{ props.product.available ? 'Add to Cart' : 'Not Available' }}
+      </button>
+    </div>
   </article>
 </template>
 
 <style scoped>
+.product-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .image-container {
   position: relative;
   width: 100%;
   padding-top: 66.67%;
   /* 6:4 aspect ratio */
   background-color: var(--pico-muted-border-color);
-  border-radius: 0.5rem;
+  border-radius: 0.125rem;
   overflow: hidden;
+  margin-bottom: var(--pico-spacing);
 }
 
 .image-container img {
@@ -57,5 +62,22 @@ const props = defineProps<ProductCardProps>()
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.price-button-container {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+strong.available {
+  color: var(--pico-primary);
+  font-size: 1.2rem;
+}
+
+strong.unavailable {
+  color: var(--pico-muted-color);
+  font-size: 1.2rem;
 }
 </style>
