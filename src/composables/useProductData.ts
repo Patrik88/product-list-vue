@@ -30,7 +30,7 @@ async function fetchProducts(): Promise<Product[]> {
 }
 
 // Custom hook to manage product data fetching with caching
-export function useProducts() {
+export function useProductData() {
   return useQuery({
     queryKey: ['products'], // Unique key for caching
     queryFn: fetchProducts, // Function to fetch data

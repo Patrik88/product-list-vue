@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Composable imports
-import { useProducts } from '../composables/useProducts'
+import { useProductData } from '../composables/useProductData'
 import { useProductFilters } from '../composables/useProductFilters'
 // Component imports
 import ProductToolbar from './ProductToolbar.vue'
@@ -8,7 +8,7 @@ import ProductCard from './ProductCard.vue'
 import SkeletonCard from './SkeletonCard.vue'
 
 // Data fetching  
-const { data: products, isLoading, isError } = useProducts()
+const { data: products, isLoading, isError } = useProductData()
 
 // Product filtering
 const {
