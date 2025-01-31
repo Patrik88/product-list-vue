@@ -1,7 +1,14 @@
 <script setup lang="ts">
-import { useProducts } from '../composables/useProducts'
+// Vue and third-party imports
 import { ref, computed } from 'vue'
+// Composable imports
+import { useProducts } from '../composables/useProducts'
+// Component imports
 import ProductToolbar from './ProductToolbar.vue'
+import ProductCard from './ProductCard.vue'
+import SkeletonCard from './SkeletonCard.vue'
+// Type imports
+import type { Product } from '../types'
 
 const { data: products, isLoading, isError } = useProducts()
 
@@ -26,7 +33,7 @@ function handleFilters(newFilters: ProductListFilters) {
   filters.value = newFilters
 }
 
-const filteredProducts = computed(() => {
+const filteredProducts = computed<Product[]>(() => {
   if (!products.value) return []
 
   const result = products.value.filter((product) => {
@@ -69,12 +76,7 @@ const filteredProducts = computed(() => {
 
     <!-- Loading State -->
     <div v-if="isLoading" class="grid" role="status" aria-live="polite">
-      <article v-for="n in 4" :key="n" role="listitem" class="skeleton">
-        <figure class="skeleton-image"></figure>
-        <h3 class="skeleton-text"></h3>
-        <p class="skeleton-text"></p>
-        <p class="skeleton-text"></p>
-      </article>
+      <SkeletonCard v-for="n in 4" :key="n" />
     </div>
 
     <!-- Error State -->
@@ -84,61 +86,9 @@ const filteredProducts = computed(() => {
 
     <!-- Product Grid (now using filteredProducts) -->
     <div v-else class="grid" role="list">
-      <article v-for="product in filteredProducts" :key="product.id" role="listitem">
-        <figure class="image-container">
-          <img :src="product.image" :alt="`Image of ${product.name}`" loading="lazy" />
-        </figure>
-        <h3 style="--pico-font-size: 1.2rem;">{{ product.name }}</h3>
-        <p style="color: var(--pico-primary);">{{ product.formattedPrice }}</p>
-        <p style="color: var(--pico-secondary);">Category: {{ product.category }}</p>
-        <p v-if="!product.available" aria-live="polite" style="color: var(--pico-del-color);">
-          Not Available
-        </p>
-      </article>
+      <ProductCard v-for="product in filteredProducts" :key="product.id" :product="product" />
     </div>
   </section>
 </template>
 
-<style scoped>
-.skeleton {
-  background-color: var(--pico-muted-border-color);
-  padding: 1rem;
-  /* border-radius: 0.5rem; */
-  height: 500.5px;
-}
-
-.skeleton-image {
-  width: 100%;
-  padding-top: 66.67%;
-  /* Maintain the 6:4 aspect ratio */
-  background-color: var(--pico-secondary-hover-background);
-  border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.skeleton-text {
-  height: 1rem;
-  background-color: var(--pico-secondary-hover-background);
-  border-radius: 0.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.image-container {
-  position: relative;
-  width: 100%;
-  padding-top: 66.67%;
-  /* 6:4 aspect ratio */
-  background-color: var(--pico-muted-border-color);
-  border-radius: 0.5rem;
-  overflow: hidden;
-}
-
-.image-container img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-</style>
+<style scoped></style>
