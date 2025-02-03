@@ -16,3 +16,13 @@ export interface Product {
   available: boolean
   image?: string
 }
+
+export interface ProductToolbarProps {
+  categories: string[]
+}
+
+export interface ToolbarFiltersType {
+  category: string
+  availability: string
+  sort: '' | 'asc' | 'desc'
+}
