@@ -1,6 +1,6 @@
-# ProductDashboard
+# Product List
 
-A Vue 3-based product dashboard that retrieves product data from an API and allows users to search, filter, and sort products in real-time. The focus is on efficient state management, API handling, and performance optimization.
+A Vue 3-based product list that retrieves product data from an API and allows users to search, filter, and sort products in real-time. The focus is on efficient state management, API handling, and performance optimization.
 
 Vue 3 + TypeScript + Vite
 
