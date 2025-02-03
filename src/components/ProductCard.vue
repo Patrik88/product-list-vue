@@ -30,8 +30,10 @@ const props = defineProps<ProductCardProps>()
         <span>{{ props.product.formattedPrice || props.product.price }}</span>
       </strong>
 
-      <button class="button" :disabled="!props.product.available">
-        {{ props.product.available ? 'Add to Cart' : 'Not Available' }}
+      <button :class="{ 'secondary outline': !props.product.available }" :disabled="!props.product.available"
+        aria-disabled="!props.product.available">
+        <span v-if="!props.product.available" style="color: var(--pico-del-color)">Out of Stock</span>
+        <span v-else>Add to Cart</span>
       </button>
     </div>
   </article>
