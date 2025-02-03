@@ -4,7 +4,7 @@ import ProductList from './components/ProductList.vue';
 
 <template>
   <main>
-    <h1>Product Dashboard</h1>
+    <h1>Product List</h1>
     <hr>
     <ProductList />
   </main>
