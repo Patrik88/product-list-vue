@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, defineProps, defineEmits, computed } from 'vue'
+import ToolbarFilters from './ToolbarFilters.vue'
+import ToolbarSearch from './ToolbarSearch.vue'
+import ToolbarSort from './ToolbarSort.vue'
 
 interface ProductToolbarProps {
   categories: string[]
@@ -7,7 +10,7 @@ interface ProductToolbarProps {
 
 const props = defineProps<ProductToolbarProps>()
 
-interface ToolbarFilters {
+interface ToolbarFiltersType {
   category: string
   availability: string
   sort: '' | 'asc' | 'desc'
@@ -15,23 +18,10 @@ interface ToolbarFilters {
 
 const emit = defineEmits<{
   (e: 'update:search', value: string): void
-  (e: 'update:filters', filters: ToolbarFilters): void
+  (e: 'update:filters', filters: ToolbarFiltersType): void
 }>()
 
-// Search
-const searchTerm = ref('')
-let debounceTimer: number | undefined
-
-function emitDebouncedSearch() {
-  if (debounceTimer) {
-    clearTimeout(debounceTimer)
-  }
-  debounceTimer = window.setTimeout(() => {
-    emit('update:search', searchTerm.value)
-  }, 300)
-}
-
-// Filters
+// Manage filter state in the parent
 const selectedCategory = ref('')
 const selectedAvailability = ref('')
 const selectedSort = ref<'' | 'asc' | 'desc'>('')
@@ -49,52 +39,42 @@ function emitFilters() {
     sort: selectedSort.value
   })
 }
+
+function handleCategoryUpdate(value: string) {
+  selectedCategory.value = value
+  emitFilters()
+}
+
+function handleAvailabilityUpdate(value: string) {
+  selectedAvailability.value = value
+  emitFilters()
+}
+
+function handleSortUpdate(value: '' | 'asc' | 'desc') {
+  selectedSort.value = value
+  emitFilters()
+}
+
+function handleSearchUpdate(value: string) {
+  // Simply re-emit the search event from the child
+  emit('update:search', value)
+}
 </script>
 
 <template>
   <div style="display: flex; flex-direction: row; gap: 2rem; align-items: flex-end;">
-    <!-- Filters -->
     <section style="display: flex; flex-direction: row; gap: 1rem; align-items: flex-end; flex-grow: 1;">
-
-      <!-- Filters -->
-      <form @submit.prevent style="display: flex; flex-direction: row; gap: 1rem;">
-        <div>
-          <label for="categorySelect">Category:</label>
-          <select id="categorySelect" v-model="selectedCategory" @change="emitFilters">
-            <option value="">All Categories</option>
-            <option v-for="option in categoryOptions" :key="option" :value="option">
-              {{ option }}
-            </option>
-          </select>
-        </div>
-
-        <div>
-          <label for="availabilitySelect">Availability:</label>
-          <select id="availabilitySelect" v-model="selectedAvailability" @change="emitFilters">
-            <option value="">All</option>
-            <option value="available">Available</option>
-            <option value="unavailable">Unavailable</option>
-          </select>
-        </div>
-      </form>
-
+      <!-- Filters (Category & Availability) -->
+      <ToolbarFilters :selectedCategory="selectedCategory" :selectedAvailability="selectedAvailability"
+        :categoryOptions="categoryOptions" @update:category="handleCategoryUpdate"
+        @update:availability="handleAvailabilityUpdate" />
       <!-- Search Field -->
-      <form aria-label="Product Search Form" @submit.prevent style="flex-grow: 1;">
-        <input type="text" aria-label="Search Products" placeholder="Search products..." v-model="searchTerm"
-          @input="emitDebouncedSearch" class="contrast" />
-      </form>
+      <ToolbarSearch @update:search="handleSearchUpdate" />
     </section>
 
     <!-- Sorting -->
     <section style="display: flex; flex-direction: row; gap: 1rem; align-items: flex-end;">
-      <div>
-        <label for="sortSelect">Sort by Price:</label>
-        <select id="sortSelect" v-model="selectedSort" @change="emitFilters" style="width: 10rem;">
-          <option value="">None</option>
-          <option value="asc">Ascending</option>
-          <option value="desc">Descending</option>
-        </select>
-      </div>
+      <ToolbarSort :selectedSort="selectedSort" @update:sort="handleSortUpdate" />
     </section>
   </div>
 </template>
